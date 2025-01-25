@@ -1,0 +1,79 @@
+<div>
+  <h2>Справочник инцидентов</h2>
+
+  <!-- Форма для добавления нового инцидента -->
+  <div>
+    <input [(ngModel)]="newIncident.description" placeholder="Описание инцидента" />
+    <input [(ngModel)]="newIncident.classification" placeholder="Классификация" />
+    <input [(ngModel)]="newIncident.client" placeholder="Клиент" />
+    <input type="datetime-local" [(ngModel)]="newIncident.dateTime" />
+    <input type="checkbox" [(ngModel)]="newIncident.isComplete" /> Завершен
+
+    <!-- Выпадающий список резолюций -->
+    <div *ngIf="newIncident.isComplete">
+      <label>Выберите резолюцию:</label>
+      <select [(ngModel)]="newIncident.resolution">
+        <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
+      </select>
+    </div>
+
+    <button (click)="addIncident()">Добавить</button>
+  </div>
+
+  <!-- Список инцидентов -->
+  <ul>
+    <li *ngFor="let incident of incidents">
+      <div>
+        <!-- Условная отрисовка: при нажатии "редактировать" на месте полей с данными выводятся инпуты для их редактирования -->
+
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <strong>Описание:</strong> {{ incident.description }}<br />
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <input  [(ngModel)]="editedIncident.description" placeholder="Редактировать описание" />
+        </div>
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <strong>Классификация:</strong> {{ incident.classification }}<br />
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <input  [(ngModel)]="editedIncident.classification" placeholder="Редактировать классификацию" />
+        </div>
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <strong>Клиент:</strong> {{ incident.client }}<br />
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <input  [(ngModel)]="editedIncident.client" placeholder="Редактировать клиента" />
+        </div>
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <strong>Дата и время:</strong> {{ incident.dateTime | date: 'short' }}<br />
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <input  type="datetime-local" [(ngModel)]="editedIncident.dateTime" placeholder="Редактировать дату и время" />
+        </div>
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <strong>Завершен:</strong> {{ incident.isComplete ? 'Да' : 'Нет' }}<br />
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <input type="checkbox" [(ngModel)]="editedIncident.isComplete" /> Завершен
+        </div>
+
+        <div *ngIf="editedIncident?.id === incident.id" >
+          <div *ngIf="editedIncident.isComplete" >
+            <label>Выберите резолюцию:</label>
+            <select [(ngModel)]="editedIncident.resolution">
+              <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
+            </select>
+          </div>
+        </div>
+        <div *ngIf="editedIncident?.id !== incident.id">
+          <button (click)="startEditing(incident)">Редактировать</button>
+        </div>
+        <div *ngIf="editedIncident?.id === incident.id">
+          <button  (click)="saveIncident()">Сохранить</button>
+        </div>
+
+        <button (click)="deleteIncident(incident.id)">Удалить</button>
+      </div>
+    </li>
+  </ul>
+</div>

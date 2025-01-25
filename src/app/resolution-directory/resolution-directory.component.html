@@ -1,0 +1,22 @@
+<div>
+  <h2>Справочник клиентов</h2>
+
+  <!-- Форма для добавления новой Резолюции -->
+  <div>
+    <input [(ngModel)]="newResolution.resolution" placeholder="Резолюция" />
+    <button (click)="addResolution()">Добавить</button>
+  </div>
+
+  <!-- Список Резолюций -->
+  <ul>
+    <li *ngFor="let resolution of resolutions">
+      <span *ngIf="editedResolution?.id !== resolution.id">{{ resolution.resolution }}</span>
+
+      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />
+
+      <button *ngIf="editedResolution?.id !== resolution.id" (click)="startEditing(resolution)">Редактировать</button>
+      <button *ngIf="editedResolution?.id === resolution.id" (click)="saveResolution()">Сохранить</button>
+      <button (click)="deleteResolution(resolution.id)">Удалить</button>
+    </li>
+  </ul>
+</div>

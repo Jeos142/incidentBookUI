@@ -1,59 +1,12 @@
 # IncidentBookUi
-
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.2.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Что есть на данный момент: 4 страницы с таблицами клиентов, инцидентов, классификаций и резолюций
+- При добавлении элемента в таблице инцидентов создается :
+  1. элемент в таблице классификаций с таким же id и описанием классификации
+  2. элемент в таблице резолюций, если элемент был создан со статусом "завершен"
+- При редактировании элемента в таблице инцидентов:
+  1. Редактируется нужный элемент в таблице классификаций
+  2. Редактируется нужный элемент в таблице резолюций. Если статус сменился с "не завершен" на "завершен", то
+элемент создается в таблице резолюций с id инцидента, если наоборот - удаляется.
+- При удалении элемента в таблице инцидентов:
+  1. Удаляется нужный элемент в таблице классификаций
+  2. Удаляется нужный элемент в таблице резолюций
