@@ -16,7 +16,8 @@
 
       <button *ngIf="editedClient?.id !== client.id" (click)="startEditing(client)">Редактировать</button>
       <button *ngIf="editedClient?.id === client.id" (click)="saveClient()">Сохранить</button>
-      <button (click)="deleteClient(client.id)">Удалить</button>
+      <button *ngIf="editedClient?.id === client.id" (click)="cancelEditing()">Отмена</button>
+<!--      <button (click)="deleteClient(client.id)">Удалить</button>-->
     </li>
   </ul>
 </div>

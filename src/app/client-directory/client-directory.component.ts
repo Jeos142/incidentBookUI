@@ -24,7 +24,7 @@ export class ClientDirectoryComponent implements OnInit {
   getClients(): void {
     this.clientService.getClients().subscribe(
       (data) => {
-        console.log('Clients loaded:', data);  // Для дебага
+        console.log('Clients loaded:', data);
         this.clients = data;
       },
       (error) => {
@@ -35,12 +35,29 @@ export class ClientDirectoryComponent implements OnInit {
 
   // Добавление нового клиента
   addClient(): void {
+    if (!this.isNewClientValid()) {
+      console.error('Ошибка: все обязательные поля должны быть заполнены.');
+      alert('Ошибка: все обязательные поля должны быть заполнены.');
+      return;
+    }
     this.clientService.addClient(this.newClient).subscribe((client) => {
       this.clients.push(client);
       this.newClient = { id: 0, name: '' };  // Очистить форму
     });
   }
 
+  //Проверка на то, что все поля нового элемента заполнены
+  isNewClientValid(): boolean {
+    return (
+      this.newClient.name.trim() !== ''
+    );
+  }
+  //Проверка на то, что все поля отредактированного элемента заполнены
+  isEditedClientValid(): boolean {
+    return (
+      this.editedClient.name.trim() !== ''
+    );
+  }
   // Начало редактирования клиента
   startEditing(client: any): void {
     this.editedClient = { ...client };  // Создаем копию клиента для редактирования
@@ -49,6 +66,12 @@ export class ClientDirectoryComponent implements OnInit {
   // Сохранение отредактированного клиента
   saveClient(): void {
     if (this.editedClient) {
+      if (!this.isEditedClientValid()) {
+        console.error('Ошибка: все обязательные поля должны быть заполнены.');
+        alert('Ошибка: все обязательные поля должны быть заполнены.');
+        return;
+      }
+
       this.clientService.editClient(this.editedClient.id, this.editedClient).subscribe(() => {
         const index = this.clients.findIndex(c => c.id === this.editedClient.id);
         if (index !== -1) {
@@ -59,6 +82,10 @@ export class ClientDirectoryComponent implements OnInit {
     }
   }
 
+  // Отмена
+  cancelEditing(): void {
+    this.editedClient = null;
+  }
   // Удаление клиента
   deleteClient(clientId: number): void {
     this.clientService.deleteClient(clientId).subscribe(() => {

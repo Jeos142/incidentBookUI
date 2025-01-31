@@ -1,13 +1,13 @@
 <div>
-  <h2>Справочник клиентов</h2>
+  <h2>Справочник классификаций</h2>
 
-  <!-- Форма для добавления нового клиента -->
+
   <div>
-    <input [(ngModel)]="newClassification.classificationName" placeholder="Классификация" />
-    <button (click)="addClassification()">Добавить</button>
+<!--    <input [(ngModel)]="newClassification.classificationName" placeholder="Классификация" />-->
+<!--    <button (click)="addClassification()">Добавить</button>-->
   </div>
 
-  <!-- Список клиентов -->
+  <!-- Список классификаций -->
   <ul>
     <li *ngFor="let classification of classifications">
       <span *ngIf="editedClassification?.id !== classification.id">{{ classification.classificationName }}</span>
@@ -16,7 +16,8 @@
 
       <button *ngIf="editedClassification?.id !== classification.id" (click)="startEditing(classification)">Редактировать</button>
       <button *ngIf="editedClassification?.id === classification.id" (click)="saveClassification()">Сохранить</button>
-      <button (click)="deleteClassification(classification.id)">Удалить</button>
+      <button *ngIf="editedClassification?.id === classification.id" (click)="cancelEditing()">Отмена</button>
+<!--      <button (click)="deleteClassification(classification.id)">Удалить</button>-->
     </li>
   </ul>
 </div>

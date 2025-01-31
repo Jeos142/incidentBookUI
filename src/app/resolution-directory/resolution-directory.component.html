@@ -1,10 +1,10 @@
 <div>
-  <h2>Справочник клиентов</h2>
+  <h2>Справочник резолюций</h2>
 
   <!-- Форма для добавления новой Резолюции -->
   <div>
-    <input [(ngModel)]="newResolution.resolution" placeholder="Резолюция" />
-    <button (click)="addResolution()">Добавить</button>
+<!--    <input [(ngModel)]="newResolution.resolution" placeholder="Резолюция" />-->
+<!--    <button (click)="addResolution()">Добавить</button>-->
   </div>
 
   <!-- Список Резолюций -->
@@ -12,11 +12,20 @@
     <li *ngFor="let resolution of resolutions">
       <span *ngIf="editedResolution?.id !== resolution.id">{{ resolution.resolution }}</span>
 
-      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />
+<!--      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />-->
 
+      <!-- Выпадающий список резолюций -->
+      <div *ngIf="editedResolution?.id === resolution.id">
+        <label>Выберите резолюцию:</label>
+        <select [(ngModel)]="editedResolution.resolution">
+          <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
+        </select>
+
+      </div>
       <button *ngIf="editedResolution?.id !== resolution.id" (click)="startEditing(resolution)">Редактировать</button>
       <button *ngIf="editedResolution?.id === resolution.id" (click)="saveResolution()">Сохранить</button>
-      <button (click)="deleteResolution(resolution.id)">Удалить</button>
+      <button *ngIf="editedResolution?.id === resolution.id" (click)="cancelEditing()">Отмена</button>
+<!--      <button (click)="deleteResolution(resolution.id)">Удалить</button>-->
     </li>
   </ul>
 </div>
