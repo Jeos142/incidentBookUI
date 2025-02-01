@@ -41,6 +41,7 @@ export class ClassificationDirectoryComponent implements OnInit {
     );
   }
 
+  
   // Добавление нового клиента
   addClassification(): void {
     this.classificationService.addClassification(this.newClassification).subscribe((classification) => {
