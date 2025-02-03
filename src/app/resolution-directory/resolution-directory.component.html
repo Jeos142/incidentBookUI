@@ -1,4 +1,4 @@
-<div>
+<div class="directory-container">
   <h2>Справочник резолюций</h2>
 
   <!-- Форма для добавления новой Резолюции -->
@@ -8,8 +8,8 @@
   </div>
 
   <!-- Список Резолюций -->
-  <ul>
-    <li *ngFor="let resolution of resolutions">
+  <ul class="directory-list">
+    <li class="directory-item" *ngFor="let resolution of resolutions">
       <span *ngIf="editedResolution?.id !== resolution.id">{{ resolution.resolution }}</span>
 
 <!--      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />-->
@@ -22,9 +22,9 @@
         </select>
 
       </div>
-      <button *ngIf="editedResolution?.id !== resolution.id" (click)="startEditing(resolution)">Редактировать</button>
-      <button *ngIf="editedResolution?.id === resolution.id" (click)="saveResolution()">Сохранить</button>
-      <button *ngIf="editedResolution?.id === resolution.id" (click)="cancelEditing()">Отмена</button>
+      <button class="directory-buttons" *ngIf="editedResolution?.id !== resolution.id" (click)="startEditing(resolution)">Редактировать</button>
+      <button class="directory-buttons" *ngIf="editedResolution?.id === resolution.id" (click)="saveResolution()">Сохранить</button>
+      <button class="directory-buttons" *ngIf="editedResolution?.id === resolution.id" (click)="cancelEditing()">Отмена</button>
 <!--      <button (click)="deleteResolution(resolution.id)">Удалить</button>-->
     </li>
   </ul>

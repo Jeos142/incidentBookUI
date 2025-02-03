@@ -1,1 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+/* Глобальный контейнер */
+.directory-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили списка */
+.directory-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+
+.directory-header {
+  display: flex;
+  justify-content: space-between;
+  background-color:lightskyblue;
+  color: white;
+  font-weight: bold;
+  padding: 12px 15px;
+}
+
+/* Элементы списка */
+.directory-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+}
+
+/* Чередование цветов строк */
+.directory-item:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Стили кнопок */
+.directory-buttons {
+
+  padding: 8px 12px;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: lightskyblue;
+}
+
+
+
+
+
+
+
+

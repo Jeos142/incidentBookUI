@@ -1,22 +1,22 @@
-<div>
+<div class="directory-container">
   <h2>Справочник клиентов</h2>
 
   <!-- Форма для добавления нового клиента -->
-  <div>
+  <div class="directory-header">
     <input [(ngModel)]="newClient.name" placeholder="Имя клиента" />
-    <button (click)="addClient()">Добавить</button>
+    <button class="directory-buttons" (click)="addClient()">Добавить</button>
   </div>
 
   <!-- Список клиентов -->
-  <ul>
-    <li *ngFor="let client of clients">
+  <ul class="directory-list" >
+    <li *ngFor="let client of clients" class="directory-item">
       <span *ngIf="editedClient?.id !== client.id">{{ client.name }}</span>
 
       <input *ngIf="editedClient?.id === client.id" [(ngModel)]="editedClient.name" placeholder="Редактировать имя" />
 
-      <button *ngIf="editedClient?.id !== client.id" (click)="startEditing(client)">Редактировать</button>
-      <button *ngIf="editedClient?.id === client.id" (click)="saveClient()">Сохранить</button>
-      <button *ngIf="editedClient?.id === client.id" (click)="cancelEditing()">Отмена</button>
+      <button class="directory-buttons" *ngIf="editedClient?.id !== client.id" (click)="startEditing(client)">Редактировать</button>
+      <button  class="directory-buttons" *ngIf="editedClient?.id === client.id" (click)="saveClient()">Сохранить</button>
+      <button  class="directory-buttons" *ngIf="editedClient?.id === client.id" (click)="cancelEditing()">Отмена</button>
 <!--      <button (click)="deleteClient(client.id)">Удалить</button>-->
     </li>
   </ul>

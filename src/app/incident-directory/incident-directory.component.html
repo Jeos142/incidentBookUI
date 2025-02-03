@@ -1,8 +1,8 @@
-<div>
+<div class="directory-container">
   <h2>Справочник инцидентов</h2>
 
   <!-- Форма для добавления нового инцидента -->
-  <div>
+  <div class="directory-header">
     <input [(ngModel)]="newIncident.description" placeholder="Описание инцидента" />
     <input [(ngModel)]="newIncident.classification" placeholder="Классификация" />
 <!--    <input [(ngModel)]="newIncident.client" placeholder="Клиент" />-->
@@ -18,30 +18,30 @@
         <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
       </select>
     </div>
-    <button (click)="addIncident()">Добавить</button>
+    <button  class="directory-buttons" (click)="addIncident()">Добавить</button>
   </div>
 
   <!-- Список инцидентов -->
-  <ul>
-    <li *ngFor="let incident of incidents">
+  <ul class="directory-list">
+    <li *ngFor="let incident of incidents"  class="directory-item">
       <!-- Если элемент редактируется -->
       <div *ngIf="editedIncident?.id === incident.id; else viewMode">
-        <input [(ngModel)]="editedIncident.description" placeholder="Описание" />
-        <input [(ngModel)]="editedIncident.classification" placeholder="Классификация" />
+        <input [(ngModel)]="editedIncident.description" placeholder="Описание" /><br />
+        <input [(ngModel)]="editedIncident.classification" placeholder="Классификация" /><br />
 <!--        <input [(ngModel)]="editedIncident.client" placeholder="Клиент" />-->
         <select [(ngModel)]="editedIncident.client">
           <option *ngFor="let client of clients" [value]="client.id">{{ client.name }}</option>
-        </select>
-        <input type="datetime-local" [(ngModel)]="editedIncident.dateTime" />
-        <input type="checkbox" [(ngModel)]="editedIncident.isComplete" /> Завершен
+        </select><br />
+        <input type="datetime-local" [(ngModel)]="editedIncident.dateTime" /><br />
+        <input type="checkbox" [(ngModel)]="editedIncident.isComplete" /> Завершен <br />
         <div *ngIf="editedIncident.isComplete" >
           <label>Выберите резолюцию:</label>
           <select [(ngModel)]="editedIncident.resolution">
             <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
           </select>
         </div>
-        <button (click)="saveIncident()">Сохранить</button>
-        <button (click)="cancelEditing()">Отмена</button>
+        <button class="directory-buttons" (click)="saveIncident()">Сохранить</button>
+        <button class="directory-buttons" (click)="cancelEditing()">Отмена</button>
       </div>
 
       <!-- Если элемент не редактируется -->
@@ -53,8 +53,9 @@
           <strong>Дата и время:</strong> {{ incident.dateTime | date: 'short' }}<br />
           <strong>Завершен:</strong> {{ incident.isComplete ? 'Да' : 'Нет' }}<br />
           <div *ngIf="incident.isComplete"><strong>Резолюция:</strong> {{ incident.resolution }} <br /> </div>
-          <button (click)="startEditing(incident)">Редактировать</button>
-          <button (click)="deleteIncident(incident.id)">Удалить</button>
+
+          <button class="directory-buttons" (click)="startEditing(incident)">Редактировать</button>
+          <button class="directory-buttons" (click)="deleteIncident(incident.id)">Удалить</button>
         </div>
       </ng-template>
     </li>
