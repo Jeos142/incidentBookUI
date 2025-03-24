@@ -17,19 +17,15 @@ export class IncidentDirectoryComponent implements OnInit {
   clients: any[] = [];
   classifications: any[] = [];
   resolutions: any[]=[];
-  resolutionOptions = [
-    'Закрыто ТП 1 уровня',
-    'Закрыто ТП 2 уровня',
-    'Закрыто ТП 3 уровня',
-    'Другое'
-  ];
   newIncident = { id: 0,
     dateTime:new Date(),
     description: '',
+    classificationId: 0,
     classification: '',
-    client:0,
+    clientId:0,
     clientName: '',
-    resolution:this.resolutionOptions[0],
+    resolutionId: 0,
+    resolution:'',
     isComplete: false
   };  // Для добавления нового инцидента
 
@@ -53,7 +49,7 @@ export class IncidentDirectoryComponent implements OnInit {
   getClassifications(): void {
     this.classificationService.getClassifications().subscribe((data) => {
       this.classifications = data;
-     // console.log('classifications:',this.classifications);
+
     });
 
   }
@@ -61,24 +57,24 @@ export class IncidentDirectoryComponent implements OnInit {
   getResolutions(): void {
     this.resolutionService.getResolutions().subscribe((data) => {
       this.resolutions=data;
-     // console.log('resolutions:',this.resolutions);
+
     })
   }
   // Получение списка инцидентов
   getIncidents(): void {
     this.incidentService.getIncidents().subscribe((data) => {
       // Преобразуем clientId в имя клиента
+      console.log(data);
       this.incidents = data.map((incident) => ({
         ...incident,
-         clientName: this.getClientName(incident.client), // Заменяем id на имя клиента
+
+        clientName: incident.client.name ,
+        classification: incident.classification.classificationName,
+        resolution: incident.resolution?.resolution,
       }));
     });
   }
-  // Метод для получения имени клиента по id
-  getClientName(clientId: number): string {
-    const client = this.clients.find((c) => c.id === clientId);
-    return client ? client.name : 'Неизвестный клиент';
-  }
+
   // Добавление нового инцидента
   addIncident(): void {
     if (!this.isNewIncidentValid()) {
@@ -88,33 +84,12 @@ export class IncidentDirectoryComponent implements OnInit {
     }
 
     this.incidentService.addIncident(this.newIncident).subscribe((incident) => {
-      // Добавление нового элемента с получением имени клиента по его id
+      // Добавление нового элемента с получением имени клиента, классификации и резолюции по id
       this.incidents.push({
         ...incident,
-        clientName: this.getClientName(incident.client)
       });
-
-      // Добавление элемента в классификации
-      const newClassification = {
-        id: incident.id, // ID инцидента
-        classificationName: this.newIncident.classification // Классификация из инцидента
-      };
-      this.classificationService.addClassification(newClassification).subscribe((classification) => {
-        this.classifications.push(classification); // Обновляем локальную таблицу классификаций
-
-      });
-      // Добавление элемента в таблицу резолюций, если инцидент завершен
-      if (this.newIncident.isComplete) {
-        const newResolution = {
-          id: incident.id,
-          resolution: this.newIncident.resolution
-        };
-
-        this.resolutionService.addResolution(newResolution).subscribe((resolution) => {})
-        this.resolutions.push(newResolution);
-      }
       // Очистить форму
-      this.newIncident = { id: 0,dateTime:new Date(), description: '', classification: '',clientName:'', client: 0, resolution:this.resolutionOptions[0], isComplete: false };
+      this.newIncident = { id: 0,dateTime:new Date(), description: '', classificationId:0, classification: '',clientName:'', clientId: 0, resolutionId: 0,resolution:'', isComplete: false };
     });
   }
 
@@ -122,7 +97,9 @@ export class IncidentDirectoryComponent implements OnInit {
   isNewIncidentValid(): boolean {
     return (
       this.newIncident.description.trim() !== '' &&
-      this.newIncident.classification.trim() !== ''
+      this.newIncident.classificationId !== 0 &&
+      this.newIncident.clientId !== 0 &&
+      ((this.newIncident.resolutionId !== 0 && this.newIncident.isComplete) || !this.newIncident.isComplete)
     );
   }
 
@@ -130,9 +107,9 @@ export class IncidentDirectoryComponent implements OnInit {
   isEditedIncidentValid(): boolean {
     return (
       this.editedIncident.description.trim() !== '' &&
-      this.editedIncident.classification.trim() !== ''&&
-
-      ((this.editedIncident.isComplete==true && this.editedIncident.resolution != null) || !this.editedIncident.isComplete )
+      this.editedIncident.classificationId!== 0 &&
+      this.editedIncident.clientId !== 0 &&
+      ((this.editedIncident.isComplete==true && this.editedIncident.resolutionId != 0) || !this.editedIncident.isComplete )
     );
   }
 
@@ -155,53 +132,10 @@ export class IncidentDirectoryComponent implements OnInit {
         const index = this.incidents.findIndex((i) => i.id === this.editedIncident.id);
 
         if (index !== -1 && JSON.stringify(this.editedIncident) !== JSON.stringify(this.incidents[index])) {  //проверка на то, что элемент существует + был изменен в ходе редактирования (если не изменен то сохранение отменяется)
-          console.log('элемент изменен');
+
+
           this.incidents[index] = this.editedIncident;
-          console.log('classifications:',this.classifications);
-          // Обновляем классификацию для этого инцидента
-          const classificationIndex = this.classifications.findIndex(
-            (c) => c.id === this.editedIncident.id
-          );
-          if (classificationIndex !== -1) {
-            this.classificationService
-              .editClassification(this.editedIncident.id, {
-                id: this.editedIncident.id,
-                classificationName: this.editedIncident.classification
-              })
-              .subscribe((updatedClassification) => {
-                this.classifications[classificationIndex] = updatedClassification; // Обновляем локальную классификацию
-              });
-          }
 
-          console.log(this.resolutions);
-          const resolutionIndex = this.resolutions.findIndex(
-            (s) => s.id === this.editedIncident.id
-          );
-          if (resolutionIndex !== -1 ) {                                                   //Проверка на существование элемента в таблице резолюций
-            if (this.editedIncident.isComplete){                                           //Проверка на то что инцидент "завершен"
-              this.resolutionService.editResolution(this.editedIncident.id, {
-              id: this.editedIncident.id,
-              resolution: this.editedIncident.resolution
-              })
-              .subscribe((updatedResolution) => {
-              this.resolutions[resolutionIndex]=updatedResolution;
-              });
-            }
-            else{                                                                           //Тут мы оказываемся, если после редактирования инцидент перестает быть завершенным
-              this.resolutionService.deleteResolution(this.editedIncident.id).subscribe(() => {})
-            }
-          }
-          else {
-            if (this.editedIncident.isComplete) {                                              //Добавляем элемент в таблицу резолюций если его статус сменился на "Завершен"
-              const newResolution = {
-                id: this.editedIncident.id,
-                resolution: this.editedIncident.resolution
-              };
-              this.resolutionService.addResolution(newResolution).subscribe((resolution) => {})
-              this.resolutions.push(newResolution);
-            }
-
-          }
         }
         this.editedIncident = null; // Завершить редактирование
 
@@ -222,17 +156,6 @@ export class IncidentDirectoryComponent implements OnInit {
     this.incidentService.deleteIncident(incidentId).subscribe(() => {
       this.incidents = this.incidents.filter(incident => incident.id !== incidentId);  // Удалить из списка
     });
-    // Удаление элемента из таблицы классификаций
-    this.classificationService.deleteClassification(incidentId).subscribe(() => {
-      this.classifications = this.classifications.filter(classification => classification.id !== incidentId);  // Удалить из списка
-    });
 
-    //Проверка на существование элемента в таблице резолюций и возможное последующее его удаление оттуда
-    const index = this.resolutions.findIndex((i) => i.id === incidentId);
-    if (index !== -1) {
-      this.resolutionService.deleteResolution(incidentId).subscribe(() => {
-        this.resolutions = this.resolutions.filter(resolution => resolution.id !== incidentId);
-      })
-    }
   }
 }

@@ -62,23 +62,18 @@ export class ResolutionDirectoryComponent implements OnInit {
   // Сохранение отредактированного резолюции
   saveResolution(): void {
     if (this.editedResolution) {
+
+
+
+
       this.resolutionService.editResolution(this.editedResolution.id, this.editedResolution).subscribe(() => {
         const index = this.resolutions.findIndex(c => c.id === this.editedResolution.id);
         if (index !== -1) {
-          this.resolutions[index] = this.editedResolution;  // Обновить данные в локальном списке
+          this.resolutions[index] = this.editedResolution;  // Обновить данные в списке
         }
-        const incidentIndex = this.incidents.findIndex((i) => i.id === this.editedResolution.id);
-        if (incidentIndex !== -1){
-          this.incidents[incidentIndex].resolution=this.resolutions[index].resolution;
-          this.incidentService
-            .editIncident(this.editedResolution.id, this.incidents[incidentIndex])
-            .subscribe((updatedIncident) => {
-              this.incidents[incidentIndex] = updatedIncident; // Обновляем локальную классификацию
-            });
-        }
-
         this.editedResolution = null;  // Завершить редактирование
       });
+
     }
   }
   cancelEditing(): void {
