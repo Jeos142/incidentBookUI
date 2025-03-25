@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResolutionService {
-  private apiUrl = 'https://localhost:7187/api/ClosedIncidentsItems';
+  private apiUrl = `${environment.base_url}/api/ClosedIncidentsItems`;
 
   constructor(private http: HttpClient) { }
 
