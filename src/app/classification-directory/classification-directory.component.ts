@@ -20,15 +20,9 @@ export class ClassificationDirectoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.getClassifications();
-    this.getIncidents();
-  }
-// Получение списка инцидентов
-  getIncidents(): void {
-    this.incidentService.getIncidents().subscribe((data) => {
 
-      this.incidents = data;
-    });
   }
+
   getClassifications(): void {
     this.classificationService.getClassifications().subscribe(
       (data) => {
@@ -41,7 +35,7 @@ export class ClassificationDirectoryComponent implements OnInit {
     );
   }
 
-  // Добавление нового клиента
+  // Добавление новй классификации
   addClassification(): void {
     this.classificationService.addClassification(this.newClassification).subscribe((classification) => {
       this.classifications.push(classification);
@@ -62,27 +56,14 @@ export class ClassificationDirectoryComponent implements OnInit {
   // Сохранение отредактированного
   saveClassification(): void {
     if (this.editedClassification) {
-      if (!this.isEditedClientValid()) {
-        console.error('Ошибка: все обязательные поля должны быть заполнены.');
-        alert('Ошибка: все обязательные поля должны быть заполнены.');
-        return;
-      }
+
+
+
       this.classificationService.editClassification(this.editedClassification.id, this.editedClassification).subscribe(() => {
         const index = this.classifications.findIndex(c => c.id === this.editedClassification.id);
         if (index !== -1) {
           this.classifications[index] = this.editedClassification;  // Обновить данные в списке
         }
-        const incidentIndex = this.incidents.findIndex((i) => i.id === this.editedClassification.id);
-        if (incidentIndex !== -1){
-          this.incidents[incidentIndex].classification=this.classifications[index].classificationName;
-          this.incidentService
-            .editIncident(this.editedClassification.id, this.incidents[incidentIndex])
-            .subscribe((updatedIncident) => {
-              this.incidents[incidentIndex] = updatedIncident; // Обновляем локальную классификацию
-            });
-        }
-
-
         this.editedClassification = null;  // Завершить редактирование
       });
     }

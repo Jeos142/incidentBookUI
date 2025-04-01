@@ -2,9 +2,9 @@
   <h2>Справочник резолюций</h2>
 
   <!-- Форма для добавления новой Резолюции -->
-  <div>
-<!--    <input [(ngModel)]="newResolution.resolution" placeholder="Резолюция" />-->
-<!--    <button (click)="addResolution()">Добавить</button>-->
+  <div class="directory-header">
+    <input [(ngModel)]="newResolution.resolution" placeholder="Резолюция" />
+    <button class="directory-buttons" (click)="addResolution()">Добавить</button>
   </div>
 
   <!-- Список Резолюций -->
@@ -12,16 +12,16 @@
     <li class="directory-item" *ngFor="let resolution of resolutions">
       <span *ngIf="editedResolution?.id !== resolution.id">{{ resolution.resolution }}</span>
 
-<!--      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />-->
+      <input *ngIf="editedResolution?.id === resolution.id" [(ngModel)]="editedResolution.resolution" placeholder="Редактировать Резолюцию" />
 
       <!-- Выпадающий список резолюций -->
-      <div *ngIf="editedResolution?.id === resolution.id">
-        <label>Выберите резолюцию:</label>
-        <select [(ngModel)]="editedResolution.resolution">
-          <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>
-        </select>
+<!--      <div *ngIf="editedResolution?.id === resolution.id">-->
+<!--        <label>Выберите резолюцию:</label>-->
+<!--        <select [(ngModel)]="editedResolution.resolution">-->
+<!--          <option *ngFor="let option of resolutionOptions" [value]="option">{{ option }}</option>-->
+<!--        </select>-->
+<!--      </div>-->
 
-      </div>
       <button class="directory-buttons" *ngIf="editedResolution?.id !== resolution.id" (click)="startEditing(resolution)">Редактировать</button>
       <button class="directory-buttons" *ngIf="editedResolution?.id === resolution.id" (click)="saveResolution()">Сохранить</button>
       <button class="directory-buttons" *ngIf="editedResolution?.id === resolution.id" (click)="cancelEditing()">Отмена</button>
