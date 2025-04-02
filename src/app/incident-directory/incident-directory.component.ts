@@ -5,6 +5,7 @@ import {CommonModule} from '@angular/common';
 import {ClassificationService} from '../services/classification.service'; // Сервис для работы с классификациями
 import  {ResolutionService} from '../services/resolution.service';// Сервис для работы с резолюциями
 import {ClientService} from '../services/client.service';
+import {LoaderService} from '../shared/loader/loader.service';
 @Component({
   selector: 'app-incident-directory',
   templateUrl: './incident-directory.component.html',
@@ -31,19 +32,24 @@ export class IncidentDirectoryComponent implements OnInit {
 
   editedIncident: any = null;  // Для редактирования инцидента
 
-  constructor(private incidentService: IncidentService, private classificationService: ClassificationService, private resolutionService: ResolutionService,  private clientService: ClientService)  {}
+  constructor(private incidentService: IncidentService, private classificationService: ClassificationService, private resolutionService: ResolutionService,  private clientService: ClientService, private loader: LoaderService)  {}
 
   ngOnInit(): void {
+
     this.getIncidents();
     this.getClassifications();
     this.getResolutions();
     this.getClients();
+
   }
   // Получение списка клиентов
   getClients(): void {
+
     this.clientService.getClients().subscribe((data) => {
       this.clients = data;
+
     });
+
   }
   // Получение списка классификаций
   getClassifications(): void {
@@ -62,6 +68,7 @@ export class IncidentDirectoryComponent implements OnInit {
   }
   // Получение списка инцидентов
   getIncidents(): void {
+
     this.incidentService.getIncidents().subscribe((data) => {
       // Преобразуем clientId в имя клиента
       console.log(data);
@@ -73,6 +80,7 @@ export class IncidentDirectoryComponent implements OnInit {
         resolution: incident.resolution?.resolution,
       }));
     });
+
   }
 
   // Добавление нового инцидента
