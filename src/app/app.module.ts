@@ -13,7 +13,7 @@ import { ResolutionDirectoryComponent } from './resolution-directory/resolution-
 import {LoaderComponent} from './shared/loader/loader.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoaderInterceptor } from './shared/loader/loader.interceptor';
-
+import { HttpErrorInterceptor } from './shared/http-error.interceptor'; //
 
 
 
@@ -43,6 +43,12 @@ import { LoaderInterceptor } from './shared/loader/loader.interceptor';
     provide: HTTP_INTERCEPTORS,
     useClass: LoaderInterceptor,
     multi: true
+    },
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

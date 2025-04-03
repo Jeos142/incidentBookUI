@@ -45,40 +45,62 @@ export class IncidentDirectoryComponent implements OnInit {
   // Получение списка клиентов
   getClients(): void {
 
-    this.clientService.getClients().subscribe((data) => {
-      this.clients = data;
+    this.clientService.getClients().subscribe( {
 
+      next: (data) => {
+        this.clients = data;
+      },
+        error: (err) => {
+        console.error('Ошибка при получении списка клиентов:',err);
+      }
     });
 
   }
   // Получение списка классификаций
   getClassifications(): void {
-    this.classificationService.getClassifications().subscribe((data) => {
-      this.classifications = data;
+    this.classificationService.getClassifications().subscribe( {
 
+      next: (data) => {
+        this.classifications = data;
+      },
+        error: (err) => {
+        console.error('Ошибка при получении списка классификаций:',err);
+      }
     });
 
   }
   // Получение списка резолюций
   getResolutions(): void {
-    this.resolutionService.getResolutions().subscribe((data) => {
-      this.resolutions=data;
+    this.resolutionService.getResolutions().subscribe({
 
+      next: (data) => {
+        this.resolutions = data;
+      },
+      error: (err) => {
+        console.error('Ошибка при получении списка резолюций:',err);
+      }
     })
   }
   // Получение списка инцидентов
   getIncidents(): void {
 
-    this.incidentService.getIncidents().subscribe((data) => {
+    this.incidentService.getIncidents().subscribe( {
       // Преобразуем clientId в имя клиента
-      console.log(data);
-      this.incidents = data.map((incident) => ({
-        ...incident,
 
-        clientName: incident.client.name ,
-        classification: incident.classification.classificationName,
-        resolution: incident.resolution?.resolution,
-      }));
+
+
+      next: (data) => {
+        this.incidents = data.map((incident) => ({
+          ...incident,
+
+          clientName: incident.client.name ,
+          classification: incident.classification.classificationName,
+          resolution: incident.resolution?.resolution,
+        }));
+      },
+        error: (err) => {
+        console.error('Ошибка при получении списка инцидентов:',err);
+      }
     });
 
   }
@@ -91,14 +113,21 @@ export class IncidentDirectoryComponent implements OnInit {
       return;
     }
 
-    this.incidentService.addIncident(this.newIncident).subscribe((incident) => {
-      // Добавление нового элемента с получением имени клиента, классификации и резолюции по id
-      this.incidents.push({
-        ...incident,
-      });
-      // Очистить форму
-      this.newIncident = { id: 0,dateTime:new Date(), description: '', classificationId:0, classification: '',clientName:'', clientId: 0, resolutionId: 0,resolution:'', isComplete: false };
+    this.incidentService.addIncident(this.newIncident).subscribe( {
+
+      next: (incident) => {
+        // Добавление нового элемента с получением имени клиента, классификации и резолюции по id
+        this.incidents.push({
+          ...incident,
+        });
+        // Очистить форму
+        this.newIncident = { id: 0,dateTime:new Date(), description: '', classificationId:0, classification: '',clientName:'', clientId: 0, resolutionId: 0,resolution:'', isComplete: false };
+      },
+        error: (err) => {
+        console.error('Ошибка при получении создании инцидента:',err);
+      }
     });
+
   }
 
   //Проверка на то, что все поля нового элемента заполнены
@@ -136,21 +165,21 @@ export class IncidentDirectoryComponent implements OnInit {
     }
 
     if (this.editedIncident  ) {
-      this.incidentService.editIncident(this.editedIncident.id, this.editedIncident).subscribe(() => {
-        const index = this.incidents.findIndex((i) => i.id === this.editedIncident.id);
-
-        if (index !== -1 && JSON.stringify(this.editedIncident) !== JSON.stringify(this.incidents[index])) {  //проверка на то, что элемент существует + был изменен в ходе редактирования (если не изменен то сохранение отменяется)
-
-
-          this.incidents[index] = this.editedIncident;
-
+      this.incidentService.editIncident(this.editedIncident.id, this.editedIncident).subscribe( {
+        next: () => {
+          const index = this.incidents.findIndex((i) => i.id === this.editedIncident.id);
+          if (index !== -1 && JSON.stringify(this.editedIncident) !== JSON.stringify(this.incidents[index])) {  //проверка на то, что элемент существует + был изменен в ходе редактирования (если не изменен то сохранение отменяется)
+            this.incidents[index] = this.editedIncident;
+          }
+          this.editedIncident = null; // Завершить редактирование
+          // Обновляем данные с сервера для синхронизации (без этого почему-то вылетает ошибка при редактировании)
+          this.getIncidents();
+          this.getClassifications();
+          this.getResolutions();
+        },
+          error: (err) => {
+          console.error('Ошибка при редактировании инцидента:',err);
         }
-        this.editedIncident = null; // Завершить редактирование
-
-        // Обновляем данные с сервера для синхронизации (без этого почему-то вылетает ошибка при редактировании)
-        this.getIncidents();
-        this.getClassifications();
-        this.getResolutions();
       });
     }
   }
@@ -161,8 +190,14 @@ export class IncidentDirectoryComponent implements OnInit {
 
   // Удаление инцидента
   deleteIncident(incidentId: number): void {
-    this.incidentService.deleteIncident(incidentId).subscribe(() => {
-      this.incidents = this.incidents.filter(incident => incident.id !== incidentId);  // Удалить из списка
+    this.incidentService.deleteIncident(incidentId).subscribe( {
+
+      next: () => {
+        this.incidents = this.incidents.filter(incident => incident.id !== incidentId);  // Удалить из списка
+      },
+        error: (err) => {
+        console.error('Ошибка при удалении инцидента :',err);
+      }
     });
 
   }

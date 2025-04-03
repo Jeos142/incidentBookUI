@@ -37,9 +37,14 @@ export class ClassificationDirectoryComponent implements OnInit {
 
   // Добавление новй классификации
   addClassification(): void {
-    this.classificationService.addClassification(this.newClassification).subscribe((classification) => {
-      this.classifications.push(classification);
-      this.newClassification = { id: 0, classificationName: '' };  // Очистить форму
+    this.classificationService.addClassification(this.newClassification).subscribe({
+      next: (classification) => {
+        this.classifications.push(classification);
+        this.newClassification = { id: 0, classificationName: '' };  // Очистить форму
+      },
+        error: (err) => {
+        console.error('Ошибка при добавлении классификации:',err);
+      }
     });
   }
   //Проверка на то, что все поля отредактированного элемента заполнены
@@ -59,12 +64,17 @@ export class ClassificationDirectoryComponent implements OnInit {
 
 
 
-      this.classificationService.editClassification(this.editedClassification.id, this.editedClassification).subscribe(() => {
-        const index = this.classifications.findIndex(c => c.id === this.editedClassification.id);
-        if (index !== -1) {
-          this.classifications[index] = this.editedClassification;  // Обновить данные в списке
+      this.classificationService.editClassification(this.editedClassification.id, this.editedClassification).subscribe( {
+        next: () => {
+          const index = this.classifications.findIndex(c => c.id === this.editedClassification.id);
+          if (index !== -1) {
+            this.classifications[index] = this.editedClassification;  // Обновить данные в списке
+          }
+          this.editedClassification = null;  // Завершить редактирование
+        },
+          error: (err) => {
+          console.error('Ошибка при редактировании классификации:',err);
         }
-        this.editedClassification = null;  // Завершить редактирование
       });
     }
   }
