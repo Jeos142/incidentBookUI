@@ -28,7 +28,7 @@ export class ClientDirectoryComponent implements OnInit {
         this.clients = data;
       },
       (error) => {
-        console.error('Error loading clients:', error);  // Логирование ошибок
+        console.error('Ошибка при загрузке клиентов:', error);
       }
     );
   }
@@ -40,9 +40,14 @@ export class ClientDirectoryComponent implements OnInit {
       alert('Ошибка: все обязательные поля должны быть заполнены.');
       return;
     }
-    this.clientService.addClient(this.newClient).subscribe((client) => {
-      this.clients.push(client);
-      this.newClient = { id: 0, name: '' };  // Очистить форму
+    this.clientService.addClient(this.newClient).subscribe({
+      next: (client) => {
+        this.clients.push(client);
+        this.newClient = { id: 0, name: '' };  // Очистить форму
+      },
+        error: (err) => {
+        console.error('Ошибка при :',err);
+      }
     });
   }
 
@@ -71,13 +76,17 @@ export class ClientDirectoryComponent implements OnInit {
         alert('Ошибка: все обязательные поля должны быть заполнены.');
         return;
       }
-
-      this.clientService.editClient(this.editedClient.id, this.editedClient).subscribe(() => {
-        const index = this.clients.findIndex(c => c.id === this.editedClient.id);
-        if (index !== -1) {
-          this.clients[index] = this.editedClient;  // Обновить данные в списке
+      this.clientService.editClient(this.editedClient.id, this.editedClient).subscribe( {
+        next: () => {
+          const index = this.clients.findIndex(c => c.id === this.editedClient.id);
+          if (index !== -1) {
+            this.clients[index] = this.editedClient;  // Обновить данные в списке
+          }
+          this.editedClient = null;  // Завершить редактирование
+        },
+          error: (err) => {
+          console.error('Ошибка при редактировании клиента:',err);
         }
-        this.editedClient = null;  // Завершить редактирование
       });
     }
   }

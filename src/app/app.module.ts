@@ -9,12 +9,18 @@ import { ClientDirectoryComponent } from './client-directory/client-directory.co
 import { ClientService } from './services/client.service';
 import { IncidentDirectoryComponent } from './incident-directory/incident-directory.component';
 import { ClassificationDirectoryComponent } from './classification-directory/classification-directory.component';
-import { ResolutionDirectoryComponent } from './resolution-directory/resolution-directory.component';  // Сервис для работы с клиентами
+import { ResolutionDirectoryComponent } from './resolution-directory/resolution-directory.component';
+import {LoaderComponent} from './shared/loader/loader.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoaderInterceptor } from './shared/loader/loader.interceptor';
+import { HttpErrorInterceptor } from './shared/http-error.interceptor'; //
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoaderComponent
 
 
 
@@ -27,11 +33,24 @@ import { ResolutionDirectoryComponent } from './resolution-directory/resolution-
     ClientDirectoryComponent,
     ClassificationDirectoryComponent,
     ResolutionDirectoryComponent,
-    // Импорт компонента для клиентов
+
+
 
 
   ],
-  providers: [ClientService, ],
+  providers: [ClientService,
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoaderInterceptor,
+    multi: true
+    },
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -15,12 +15,7 @@ export class ResolutionDirectoryComponent implements OnInit {
   incidents: any[] = [];
   newResolution = { id: 0, resolution: '' };  // Для добавления нового резолюции
   editedResolution: any = null;  // Для редактирования резолюции
-  resolutionOptions = [
-    'Закрыто ТП 1 уровня',
-    'Закрыто ТП 2 уровня',
-    'Закрыто ТП 3 уровня',
-    'Другое'
-  ];
+
 
   constructor(private resolutionService: ResolutionService,private incidentService: IncidentService) { }
 
@@ -48,9 +43,20 @@ export class ResolutionDirectoryComponent implements OnInit {
 
   // Добавление новой резолюции
   addResolution(): void {
-    this.resolutionService.addResolution(this.newResolution).subscribe((client) => {
-      this.resolutions.push(client);
-      this.newResolution = { id: 0, resolution: '' };  // Очистить форму
+    if (!this.isNewResolutionValid()) {
+      console.error('Ошибка: все обязательные поля должны быть заполнены.');
+      alert('Ошибка: все обязательные поля должны быть заполнены.');
+      return;
+    }
+    this.resolutionService.addResolution(this.newResolution).subscribe( {
+
+      next: (client) => {
+        this.resolutions.push(client);
+        this.newResolution = { id: 0, resolution: '' };  // Очистить форму
+      },
+        error: (err) => {
+        console.error('Ошибка при :',err);
+      }
     });
   }
 
@@ -61,17 +67,24 @@ export class ResolutionDirectoryComponent implements OnInit {
 
   // Сохранение отредактированного резолюции
   saveResolution(): void {
+    if (!this.isEditedResolutionValid()) {
+      console.error('Ошибка: все обязательные поля должны быть заполнены.');
+      alert('Ошибка: все обязательные поля должны быть заполнены.');
+      return;
+    }
     if (this.editedResolution) {
+      this.resolutionService.editResolution(this.editedResolution.id, this.editedResolution).subscribe( {
 
-
-
-
-      this.resolutionService.editResolution(this.editedResolution.id, this.editedResolution).subscribe(() => {
-        const index = this.resolutions.findIndex(c => c.id === this.editedResolution.id);
-        if (index !== -1) {
-          this.resolutions[index] = this.editedResolution;  // Обновить данные в списке
+        next: () => {
+          const index = this.resolutions.findIndex(c => c.id === this.editedResolution.id);
+          if (index !== -1) {
+            this.resolutions[index] = this.editedResolution;  // Обновить данные в списке
+          }
+          this.editedResolution = null;  // Завершить редактирование
+        },
+          error: (err) => {
+          console.error('Ошибка при редакатировании резолюции:',err);
         }
-        this.editedResolution = null;  // Завершить редактирование
       });
 
     }
@@ -84,5 +97,17 @@ export class ResolutionDirectoryComponent implements OnInit {
     this.resolutionService.deleteResolution(resolutionId).subscribe(() => {
       this.resolutions = this.resolutions.filter(resolution => resolution.id !== resolutionId);  // Удалить из списка
     });
+  }
+  //Проверка на то, что все поля нового элемента заполнены
+  isNewResolutionValid(): boolean {
+    return (
+      this.newResolution.resolution.trim() !== ''
+    );
+  }
+  //Проверка на то, что все поля нового элемента заполнены
+  isEditedResolutionValid(): boolean {
+    return (
+      this.editedResolution.resolution.trim() !== ''
+    );
   }
 }
