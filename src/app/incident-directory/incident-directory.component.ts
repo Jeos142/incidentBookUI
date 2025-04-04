@@ -201,4 +201,21 @@ export class IncidentDirectoryComponent implements OnInit {
     });
 
   }
+  confirmDeleteId: number | null = null;
+
+  askDelete(id: number): void {
+    this.confirmDeleteId = id;
+  }
+
+  performDelete(): void {
+    if (this.confirmDeleteId !== null) {
+      this.deleteIncident(this.confirmDeleteId);
+      this.confirmDeleteId = null;
+    }
+  }
+
+  cancelDelete(): void {
+    this.confirmDeleteId = null;
+  }
+
 }

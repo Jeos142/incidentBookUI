@@ -66,9 +66,20 @@
           <div *ngIf="incident.isComplete"><strong>Резолюция:</strong> {{ incident.resolution }} <br /> </div>
 
           <button class="directory-buttons" (click)="startEditing(incident)">Редактировать</button>
-          <button class="directory-buttons" (click)="deleteIncident(incident.id)">Удалить</button>
+          <button class="directory-buttons" (click)="askDelete(incident.id)">Удалить</button>
         </div>
       </ng-template>
     </li>
   </ul>
 </div>
+<!-- Подтверждение удаления -->
+<div class="modal" *ngIf="confirmDeleteId !== null">
+  <div class="modal-content">
+    <p>Вы уверены, что хотите удалить инцидент?</p>
+    <div class="modal-actions">
+      <button id="delete-yes" (click)="performDelete()">Да</button>
+      <button (click)="cancelDelete()">Нет</button>
+    </div>
+  </div>
+</div>
+
