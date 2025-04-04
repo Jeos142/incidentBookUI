@@ -37,6 +37,11 @@ export class ClassificationDirectoryComponent implements OnInit {
 
   // Добавление новй классификации
   addClassification(): void {
+    if (!this.isNewClassificationValid()) {
+      console.error('Ошибка: все обязательные поля должны быть заполнены.');
+      alert('Ошибка: все обязательные поля должны быть заполнены.');
+      return;
+    }
     this.classificationService.addClassification(this.newClassification).subscribe({
       next: (classification) => {
         this.classifications.push(classification);
@@ -48,9 +53,15 @@ export class ClassificationDirectoryComponent implements OnInit {
     });
   }
   //Проверка на то, что все поля отредактированного элемента заполнены
-  isEditedClientValid(): boolean {
+  isEditedClassificationValid(): boolean {
     return (
       this.editedClassification.classificationName.trim() !== ''
+    );
+  }
+  //Проверка на то, что все поля нового элемента заполнены
+  isNewClassificationValid(): boolean {
+    return (
+      this.newClassification.classificationName.trim() !== ''
     );
   }
   // Начало редактирования
@@ -60,10 +71,12 @@ export class ClassificationDirectoryComponent implements OnInit {
 
   // Сохранение отредактированного
   saveClassification(): void {
+    if (!this.isEditedClassificationValid()) {
+      console.error('Ошибка: все обязательные поля должны быть заполнены.');
+      alert('Ошибка: все обязательные поля должны быть заполнены.');
+      return;
+    }
     if (this.editedClassification) {
-
-
-
       this.classificationService.editClassification(this.editedClassification.id, this.editedClassification).subscribe( {
         next: () => {
           const index = this.classifications.findIndex(c => c.id === this.editedClassification.id);
