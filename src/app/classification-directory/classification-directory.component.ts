@@ -31,7 +31,7 @@ export class ClassificationDirectoryComponent implements OnInit {
       },
       (error) => {
         console.error('Ошибка при загрузке классификаций:', error);  // Логирование ошибок
-        alert(`Ошибка при добавлении классификации: ${error}`)
+        alert(`Ошибка при загрузке классификации: ${error.message}`)
       }
     );
   }
@@ -50,7 +50,7 @@ export class ClassificationDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при добавлении классификации:',err);
-          alert(`Ошибка при добавлении классификации: ${err}`)
+          alert(`Ошибка при добавлении классификации: ${err.message}`)
       }
     });
   }
@@ -89,7 +89,7 @@ export class ClassificationDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редактировании классификации:',err);
-            alert(`Ошибка при редактировании классификации: ${err}`)
+            alert(`Ошибка при редактировании классификации: ${err.message}`)
         }
       });
     }

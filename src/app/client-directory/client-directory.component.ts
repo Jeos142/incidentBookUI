@@ -29,6 +29,7 @@ export class ClientDirectoryComponent implements OnInit {
       },
       (error) => {
         console.error('Ошибка при загрузке клиентов:', error);
+        alert(`Ошибка при загрузке пользователей: ${error.message}`)
       }
     );
   }
@@ -47,7 +48,7 @@ export class ClientDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при добавлении пользователя:',err);
-          alert(`Ошибка при добавлении пользователя: ${err}`)
+          alert(`Ошибка при добавлении пользователя: ${err.message}`)
       }
     });
   }
@@ -87,7 +88,7 @@ export class ClientDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редактировании клиента:',err);
-            alert(`Ошибка при редактировании клиента: ${err}`)
+            alert(`Ошибка при редактировании клиента: ${err.message}`)
         }
       });
     }
