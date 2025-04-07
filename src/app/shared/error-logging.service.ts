@@ -13,6 +13,7 @@ export class ErrorLoggingService {
       console.log('Статус:', error.status);
       console.log('URL:', error.url);
       console.log('Сообщение:', error.message);
+      alert(`Ошибка при http запросе: ${error.message}`);
     }
 
     console.groupEnd();

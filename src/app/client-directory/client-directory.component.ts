@@ -46,7 +46,8 @@ export class ClientDirectoryComponent implements OnInit {
         this.newClient = { id: 0, name: '' };  // Очистить форму
       },
         error: (err) => {
-        console.error('Ошибка при :',err);
+        console.error('Ошибка при добавлении пользователя:',err);
+          alert(`Ошибка при добавлении пользователя: ${err}`)
       }
     });
   }
@@ -86,6 +87,7 @@ export class ClientDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редактировании клиента:',err);
+            alert(`Ошибка при редактировании клиента: ${err}`)
         }
       });
     }
