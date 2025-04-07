@@ -30,7 +30,8 @@ export class ClassificationDirectoryComponent implements OnInit {
         this.classifications = data;
       },
       (error) => {
-        console.error('Error loading classifications:', error);  // Логирование ошибок
+        console.error('Ошибка при загрузке классификаций:', error);  // Логирование ошибок
+        alert(`Ошибка при загрузке классификации: ${error.message}`)
       }
     );
   }
@@ -49,6 +50,7 @@ export class ClassificationDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при добавлении классификации:',err);
+          alert(`Ошибка при добавлении классификации: ${err.message}`)
       }
     });
   }
@@ -87,6 +89,7 @@ export class ClassificationDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редактировании классификации:',err);
+            alert(`Ошибка при редактировании классификации: ${err.message}`)
         }
       });
     }

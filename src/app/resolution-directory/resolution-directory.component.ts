@@ -36,7 +36,8 @@ export class ResolutionDirectoryComponent implements OnInit {
         this.resolutions = data;
       },
       (error) => {
-        console.error('Error loading :', error);  // Логирование ошибок
+        console.error('Ошибка при загрузке резолюций :', error);  // Логирование ошибок
+        alert(`Ошибка при загрузке резолюций: ${error.message}`)
       }
     );
   }
@@ -55,7 +56,8 @@ export class ResolutionDirectoryComponent implements OnInit {
         this.newResolution = { id: 0, resolution: '' };  // Очистить форму
       },
         error: (err) => {
-        console.error('Ошибка при :',err);
+        console.error('Ошибка при добавлении резолюции:',err);
+          alert(`Ошибка при добавлении резолюции: ${err.message}`)
       }
     });
   }
@@ -84,6 +86,7 @@ export class ResolutionDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редакатировании резолюции:',err);
+            alert(`Ошибка при редакатировании резолюции: ${err.message}`)
         }
       });
 
