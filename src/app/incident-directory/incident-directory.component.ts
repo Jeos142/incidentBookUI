@@ -52,6 +52,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при получении списка клиентов:',err);
+        alert(`Ошибка при получении списка клиентов: ${err.message}`)
       }
     });
 
@@ -65,6 +66,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при получении списка классификаций:',err);
+        alert(`Ошибка при получении списка классификаций: ${err.message}`)
       }
     });
 
@@ -78,6 +80,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
       error: (err) => {
         console.error('Ошибка при получении списка резолюций:',err);
+        alert(`Ошибка при получении списка резолюций: ${err.message}`)
       }
     })
   }
@@ -100,6 +103,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при получении списка инцидентов:',err);
+        alert(`Ошибка при получении списка инцидентов: ${err.message}`)
       }
     });
 
@@ -125,6 +129,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при получении создании инцидента:',err);
+        alert(`Ошибка при получении создании инцидента: ${err.message}`)
       }
     });
 
@@ -179,6 +184,7 @@ export class IncidentDirectoryComponent implements OnInit {
         },
           error: (err) => {
           console.error('Ошибка при редактировании инцидента:',err);
+          alert(`Ошибка при редактировании инцидента: ${err.message}`)
         }
       });
     }
@@ -197,6 +203,7 @@ export class IncidentDirectoryComponent implements OnInit {
       },
         error: (err) => {
         console.error('Ошибка при удалении инцидента :',err);
+        alert(`Ошибка при удалении инцидента: ${err.message}`)
       }
     });
 
